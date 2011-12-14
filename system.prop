@@ -9,6 +9,8 @@ ro.default_usb_mode=4
 ro.usb.use_custom_service=1
 #use charge counter for 1% battery
 #ro.product.use_charge_counter=1
+ro.config.disable_hw_accel=true
+persist.sys.usb.config=mass_storage,adb
 
 #wifi timeout
 ro.product.wifi_timeout=300000
@@ -168,7 +170,7 @@ ro.mot.dpmext = true
 ro.cdma.home.operator.isnan=1
 persist.radio.ap.phonetype=2
 #set system property for camera calibration in phone
-ro.mot.hw.calibratedImager=1
+#ro.mot.hw.calibratedImager=1
 # END IKDROID2-5584
 
 

@@ -19,123 +19,116 @@
 # not specialized for any geography.
 #
 
+DEVICE_PREBUILT := device/motorola/droid2we/prebuilt
+
 # The gps config appropriate for this device
 $(call inherit-product, device/common/gps/gps_us_supl.mk)
 
 ## (1) First, the most specific values, i.e. the aspects that are specific to GSM
 
 PRODUCT_COPY_FILES += \
+    device/motorola/droid2we/init.rc:root/init.rc \
     device/motorola/droid2we/init.mapphone_cdma.rc:root/init.mapphone_cdma.rc \
-    device/motorola/droid2we/init.mapphone_umts.rc:root/init.mapphone_umts.rc \
+    device/motorola/droid2we/init.mapphone_cdma.rc:root/init.mapphone_umts.rc \
+    device/motorola/droid2we/init.mapphone_cdma.usb.rc:root/init.mapphone_cdma.usb.rc \
     device/motorola/droid2we/ueventd.mapphone_cdma.rc:root/ueventd.mapphone_cdma.rc
 
-## (2) Also get non-open-source GSM-specific aspects if available
-$(call inherit-product-if-exists, vendor/motorola/droid2we/droid2we-vendor.mk)
-
 ## (3)  Finally, the least specific parts, i.e. the non-GSM-specific aspects
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.kernel.android.ril=yes \
-    persist.ril.mux.noofchannels=8 \
-    persist.ril.mux.ttydevice=/dev/ttyS0 \
-    persist.ril.modem.ttydevice=/dev/ttyUSB4 \
-    persist.ril.features=0x0E \
-    persist.ril.mux.retries=500 \
-    persist.ril.mux.sleep=2 \
-    ro.default_usb_mode=4 \
-    ro.product.multi_touch_enabled=true \
-    ro.product.max_num_touch=2 \
-    ro.telephony.sms_segment_size=160 \
-    ro.setupwizard.mode=OPTIONAL \
-    ro.com.google.gmsversion=2.2_r7 \
-    ro.telephony.call_ring.multiple=false \
-    ro.telephony.call_ring.delay=1000 \
-    ro.url.safetylegal=http://www.motorola.com/staticfiles/Support/legal/?model=A956 \
-    ro.setupwizard.enable_bypass=1 \
-    ro.com.google.clientid=android-motorola \
-    ro.com.google.clientidbase=android-verizon \
-    ro.com.google.clientidbase.am=android-verizon \
-    ro.url.legal=http://www.google.com/intl/%s/mobile/android/basic/phone-legal.html \
-    ro.url.legal.android_privacy=http://www.google.com/intl/%s/mobile/android/basic/privacy.html \
-    ro.cdma.home.operator.numeric=310004 \
-    ro.cdma.home.operator.alpha=Verizon \
-    ro.config.vc_call_vol_steps=7 \
-    ro.cdma.homesystem=64,65,76,77,78,79,80,81,82,83 \
-    ro.cdma.data_retry_config=default_randomization=2000,0,0,120000,180000,540000,960000 \
-    ro.com.motorola.smartsensor=true \
-    ro.media.sensor.orient=90 \
-    ro.media.capture.maxres=5m \
-    ro.media.capture.fast.fps=4 \
-    ro.media.capture.slow.fps=60 \
-    ro.media.capture.flash=led \
-    ro.media.capture.classification=classF \
-    ro.media.capture.useDFR=1 \
-    ro.media.camera.focal=3564.0,3564.0 \
-    ro.media.camera.principal=1632.0,1224.0 \
-    ro.media.camera.skew=0.0 \
-    ro.media.camera.distortion=0.0,0.0,0.0,0.0,0.0 \
-    ro.media.camera.calresolution=3264,2448 \
-    ro.mot.hw.uaprof=http://uaprof.motorola.com/phoneconfig/MotoMB200/profile/MotoMB200.rdf \
-    ro.build.version.full=Blur_Version.2.3.340.MB810.Verizon.en.US \
-    ro.build.config.version=GAS_NA_GCXSHAD00VZW_P022 \
-    ro.build.config.date=Sun_Nov_07_23:40:30_-0600_2010 \
-    ro.kernel.android.checkjni=0
 
-#############################################################
-#    debug.mot.extwmlog=1 \
-#    debug.mot.extamlog=1 \
+# Device overlay
+DEVICE_PACKAGE_OVERLAYS += device/motorola/droid2we/overlay
 
+# Permissions files
 PRODUCT_COPY_FILES += \
     frameworks/base/data/etc/handheld_core_hardware.xml:system/etc/permissions/handheld_core_hardware.xml \
+    frameworks/base/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
     frameworks/base/data/etc/android.hardware.camera.flash-autofocus.xml:system/etc/permissions/android.hardware.camera.flash-autofocus.xml \
+    frameworks/base/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
+    frameworks/base/data/etc/android.hardware.touchscreen.multitouch.distinct.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.distinct.xml \
+    frameworks/base/data/etc/android.hardware.sensor.light.xml:system/etc/permissions/android.hardware.sensor.light.xml \
+    frameworks/base/data/etc/android.hardware.sensor.proximity.xml:system/etc/permissions/android.hardware.sensor.proximity.xml \
     frameworks/base/data/etc/android.hardware.telephony.cdma.xml:system/etc/permissions/android.hardware.telephony.cdma.xml \
     frameworks/base/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml \
-    frameworks/base/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml \
-    frameworks/base/data/etc/android.hardware.wifi.xml:system/etc/permissions/android.hardware.wifi.xml \
-    frameworks/base/data/etc/android.hardware.sensor.proximity.xml:system/etc/permissions/android.hardware.sensor.proximity.xml \
-    frameworks/base/data/etc/android.hardware.sensor.light.xml:system/etc/permissions/android.hardware.sensor.light.xml \
-    frameworks/base/data/etc/android.hardware.touchscreen.multitouch.distinct.xml:system/etc/permissions/android.hardware.touchscreen.multitouch.distinct.xml \
     frameworks/base/data/etc/android.software.sip.voip.xml:system/etc/permissions/android.software.sip.voip.xml
 
-# media config xml file
+# Prebuilts
 PRODUCT_COPY_FILES += \
-    device/motorola/droid2we/media_profiles.xml:system/etc/media_profiles.xml
+    $(DEVICE_PREBUILT)/bin/mount_ext3.sh:system/bin/mount_ext3.sh \
+    $(DEVICE_PREBUILT)/etc/apns-conf.xml:system/etc/apns-conf.xml \
+    $(DEVICE_PREBUILT)/etc/gps.conf:system/etc/gps.conf \
+    $(DEVICE_PREBUILT)/etc/media_profiles.xml:system/etc/media_profiles.xml \
+    $(DEVICE_PREBUILT)/etc/powervr.ini:system/etc/powervr.ini \
+    $(DEVICE_PREBUILT)/etc/vold.fstab:system/etc/vold.fstab \
+    $(DEVICE_PREBUILT)/media/bootanimation.zip:system/media/bootanimation.zip \
+#    $(DEVICE_PREBUILT)/etc/wifi/tiwlan_ap.ini:system/etc/wifi/tiwlan_ap.ini \
+#    $(DEVICE_PREBUILT)/etc/wifi/tiwlan.ini:system/etc/wifi/tiwlan.ini \
+#    $(DEVICE_PREBUILT)/usr/idc/qtouch-touchscreen.idc:system/usr/idc/qtouch-touchscreen.idc \
+#    $(DEVICE_PREBUILT)/usr/keylayout/AVRCP.kl:system/usr/keylayout/AVRCP.kl \
+#    $(DEVICE_PREBUILT)/usr/keylayout/cpcap-key.kl:system/usr/keylayout/cpcap-key.kl \
+#    $(DEVICE_PREBUILT)/usr/keylayout/cdma_droid2we-keypad.kl:system/usr/keylayout/cdma_droid2we-keypad.kl \
+#    $(DEVICE_PREBUILT)/usr/keylayout/usb_keyboard_102_en_us.kl:system/usr/keylayout/usb_keyboard_102_en_us.kl \
+
+# Key Layouts
+PRODUCT_COPY_FILES += \
+    $(DEVICE_PREBUILT)/usr/idc/qtouch-touchscreen.idc:system/usr/idc/qtouch-touchscreen.idc \
+    $(DEVICE_PREBUILT)/usr/keylayout/cdma_droid2we-keypad.kl:system/usr/keylayout/sholes-keypad.kl \
+    $(DEVICE_PREBUILT)/usr/keylayout/cdma_droid2we-keypad.kl:system/usr/keylayout/cdma_droid2we-keypad.kl \
+
+# Graphics
+PRODUCT_COPY_FILES += \
+    $(DEVICE_PREBUILT)/etc/egl.cfg:system/etc/egl.cfg \
+    $(DEVICE_PREBUILT)/imgtec/pvrsrvinit:system/bin/pvrsrvinit \
+    $(DEVICE_PREBUILT)/imgtec/libEGL_POWERVR_SGX530_125.so:system/lib/egl/libEGL_POWERVR_SGX530_125.so \
+    $(DEVICE_PREBUILT)/imgtec/libGLESv1_CM_POWERVR_SGX530_125.so:system/lib/egl/libGLESv1_CM_POWERVR_SGX530_125.so \
+    $(DEVICE_PREBUILT)/imgtec/libGLESv2_POWERVR_SGX530_125.so:system/lib/egl/libGLESv2_POWERVR_SGX530_125.so \
+    $(DEVICE_PREBUILT)/imgtec/libglslcompiler.so:system/lib/libglslcompiler.so \
+    $(DEVICE_PREBUILT)/imgtec/libHPImgApi.so:system/lib/libHPImgApi.so \
+    $(DEVICE_PREBUILT)/imgtec/libIMGegl.so:system/lib/libIMGegl.so \
+    $(DEVICE_PREBUILT)/imgtec/libpvr2d.so:system/lib/libpvr2d.so \
+    $(DEVICE_PREBUILT)/imgtec/libpvrANDROID_WSEGL.so:system/lib/libpvrANDROID_WSEGL.so \
+    $(DEVICE_PREBUILT)/imgtec/libsrv_init.so:system/lib/libsrv_init.so \
+    $(DEVICE_PREBUILT)/imgtec/libsrv_um.so:system/lib/libsrv_um.so \
+    $(DEVICE_PREBUILT)/imgtec/libusc.so:system/lib/libusc.so \
+    $(DEVICE_PREBUILT)/imgtec/libeglinfo.so:system/lib/egl/libeglinfo.so \
+    $(DEVICE_PREBUILT)/imgtec/libgles1_texture_stream.so:system/lib/egl/libgles1_texture_stream.so \
+    $(DEVICE_PREBUILT)/imgtec/libgles2_texture_stream.so:system/lib/egl/libgles2_texture_stream.so \
+    $(DEVICE_PREBUILT)/imgtec/gralloc.omap3.so:system/lib/hw/gralloc.omap3.so \
+
+# HW Libs
+PRODUCT_PACKAGES += \
+    hwcomposer.default \
+
+# Lights
+#PRODUCT_PACKAGES += \
+#    lights.droid2we \
+
+# Sensors
+#PRODUCT_PACKAGES += \
+#    sensors.droid2we \
+
+# Wifi
+PRODUCT_PACKAGES += \
+    libCustomWifi \
+    wlan_loader \
+    wlan_cu \
+    dhcpcd.conf \
+    wpa_supplicant.conf \
 
 PRODUCT_PACKAGES += \
-    librs_jni \
-    tiwlan.ini \
-    dspexec \
-    libbridge \
-    overlay.omap3 \
-    wlan_cu \
-    libtiOsLib \
-    wlan_loader \
-    libCustomWifi \
-    wpa_supplicant.conf \
-    dhcpcd.conf \
-    libOMX.TI.AAC.encode \
-    libOMX.TI.AMR.encode \
-    libOMX.TI.WBAMR.encode \
-    libOMX.TI.JPEG.Encoder \
-    libLCML \
-    libOMX_Core \
-    libOMX.TI.Video.Decoder \
-    libOMX.TI.Video.encoder \
-    libVendor_ti_omx \
-    libaudiopolicy \
-    Usb
+    Camera \
+    Usb \
+
+# Sandbox
+PRODUCT_COPY_FILES += \
+    $(DEVICE_PREBUILT)/bin/hijack:system/bin/hijack \
+    $(DEVICE_PREBUILT)/bin/hijack.log_dump:system/bin/hijack.log_dump \
+    $(DEVICE_PREBUILT)/etc/hijack-boot.zip:system/etc/hijack-boot.zip \
 
 # we have enough storage space to hold precise GC data
 PRODUCT_TAGS += dalvik.gc.type-precise
 
-# Passion uses high-density artwork where available
+# High-density artwork where available
 PRODUCT_LOCALES += hdpi
-
-PRODUCT_COPY_FILES += \
-    device/motorola/droid2we/DroidXBootstrap.cfg:system/etc/DroidXBootstrap.cfg \
-    device/motorola/droid2we/Droid2Bootstrap.cfg:system/etc/Droid2Bootstrap.cfg \
-    device/motorola/droid2we/vold.fstab:system/etc/vold.fstab \
-    device/motorola/droid2we/apns-conf.xml:system/etc/apns-conf.xml \
-    device/motorola/droid2we/mount_ext3.sh:system/bin/mount_ext3.sh
 
 # these need to be here for the installer, just put them here for now
 PRODUCT_COPY_FILES += \
@@ -159,17 +152,15 @@ endif
 PRODUCT_COPY_FILES += \
     $(LOCAL_KERNEL):kernel
 
-$(call inherit-product-if-exists, vendor/motorola/droid2we/droid2we-vendor.mk)
+$(call inherit-product, hardware/ti/omap3/Android.mk)
 
-# media profiles and capabilities spec
-# $(call inherit-product, device/motorola/shadow/media_a1026.mk)
+$(call inherit-product-if-exists, vendor/motorola/droid2we/droid2we-vendor.mk)
+$(call inherit-product-if-exists, vendor/cm/config/common_full_phone.mk)
 
 # stuff common to all Motorola phones
-$(call inherit-product, device/motorola/common/common_hijack.mk)
+#$(call inherit-product, device/motorola/common/common_hijack.mk)
 
 $(call inherit-product, build/target/product/full_base.mk)
 
-# use droid2we overlay
-DEVICE_PACKAGE_OVERLAYS += device/motorola/droid2we/overlay
-PRODUCT_NAME := generic_droid2we
+PRODUCT_NAME := cm_droid2we
 PRODUCT_DEVICE := droid2we

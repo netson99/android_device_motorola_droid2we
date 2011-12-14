@@ -370,7 +370,7 @@ service rild_tcmd /system/bin/rild_tcmd
 
 service battd /system/bin/battd
     class pre-zygote_services
-    socket battdsock stream 0660 root system
+    socket battdsock stream 0660 mot_accy mot_accy
     user root
     group mot_accy mot_pwric
     oneshot
@@ -562,7 +562,7 @@ service btautoip /system/bin/dhcpcd -BK bnep0
 service baseimage /system/bin/dspexec -v -T /system/lib/dsp/baseimage.dof
     class media_early_init
     user  media
-    group media graphics mot_whisper audio
+    group media graphics
     oneshot
 
 service pvrsrv /system/bin/pvrsrvinit
