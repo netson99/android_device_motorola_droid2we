@@ -401,12 +401,12 @@ on property:tcmd.unload_wlan=2
 
 # Ecompass daemon
 service akmd2 /system/bin/akmd2
-    class main
+    class late_start
     user compass
     group compass misc input
 
 # Wifi services
-service wlan_loader /system/bin/wlan_loader -f /system/etc/wifi/fw_wlan1271.bin -i /system/etc/wifi/tiwlan.ini -e /pds/wifi/nvs_map.bin
+service wlan_loader /system/bin/logwrapper /system/bin/wlan_loader -f /system/etc/wifi/fw_wlan1271.bin -i /system/etc/wifi/tiwlan.ini -e /pds/wifi/nvs_map.bin
     class main
     disabled
     oneshot
