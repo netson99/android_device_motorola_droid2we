@@ -68,7 +68,7 @@ ro.media.panorama.defres=2592x1456
 ro.media.panorama.frameres=848x480
 
 # Display
-mot.proximity.delay=450
+mot.proximity.delay=90
 mot.proximity.distance=60
 persist.mot.proximity.touch=1
 ro.min_pointer_dur=10
