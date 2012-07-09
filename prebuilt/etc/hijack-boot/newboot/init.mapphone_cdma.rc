@@ -250,6 +250,8 @@ on boot
     write /sys/devices/platform/omapdss/overlay0/enabled 1
     insmod /system/lib/modules/pvrsrvkm.ko
     insmod /system/lib/modules/omaplfb.ko
+    chmod 0666 /dev/pvrsrvkm
+    exec /system/bin/pvrsrvinit
 
     # Net
     insmod /system/lib/modules/ifb.ko
@@ -429,12 +431,6 @@ service baseimage /system/bin/dspexec -T /system/lib/dsp/baseimage.dof
     class main
     user media
     group media graphics
-    oneshot
-
-service pvrsrvinit /system/bin/pvrsrvinit
-    class core
-    user root
-    group root
     oneshot
 
 on property:dev.bootcomplete=1
