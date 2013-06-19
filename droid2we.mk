@@ -174,5 +174,9 @@ $(call inherit-product, build/target/product/full_base.mk)
 
 # use droid2we overlay
 DEVICE_PACKAGE_OVERLAYS += device/motorola/droid2we/overlay
-PRODUCT_NAME := generic_droid2we
-PRODUCT_DEVICE := droid2we
+PRODUCT_NAME := cm_droid2we
+PRODUCT_BRAND := verizon
+PRODUCT_DEVICE := cdma_droid2we
+PRODUCT_MODEL := Droid2 Global
+PRODUCT_MANUFACTURER := motorola
+PRODUCT_BUILD_PROP_OVERRIDES += PRODUCT_NAME=droid2we_vzw BUILD_ID=4.5.1_57_D2GA-59 BUILD_FINGERPRINT=verizon/droid2we_vzw/cdma_droid2we:2.3.4/4.5.1_57_D2GA-59/120117:user/release-keys PRIVATE_BUILD_DESC="cdma_droid2we-user 2.3.4 4.5.1_57_D2GA-59 120117 release-keys"
