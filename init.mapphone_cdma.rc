@@ -154,6 +154,7 @@ on post-fs
 
 # Install kernel modules
     insmod /system/lib/modules/sec.ko
+    insmod /system/lib/modules/cpufreq_powersave.ko
 
 # Install product specific kernel modules
     exec /system/bin/load_modules.sh
