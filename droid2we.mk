@@ -33,6 +33,10 @@ PRODUCT_COPY_FILES += \
 ## (2) Also get non-open-source GSM-specific aspects if available
 $(call inherit-product-if-exists, vendor/motorola/droid2we/droid2we-vendor.mk)
 
+# SIM Toolkit
+PRODUCT_PACKAGES += \
+    Stk
+
 ## (3)  Finally, the least specific parts, i.e. the non-GSM-specific aspects
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.kernel.android.ril=yes \
