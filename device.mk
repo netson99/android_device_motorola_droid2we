@@ -25,5 +25,8 @@ PRODUCT_COPY_FILES := \
 	frameworks/base/data/etc/android.hardware.telephony.cdma.xml:system/etc/permissions/android.hardware.telephony.cdma.xml \
 	frameworks/base/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml
 
-$(call inherit-product, device/motorola/omap34com/device.mk)
+$(call inherit-product, device/motorola/hijack/common_hijack.mk)
+$(call inherit-product, frameworks/native/build/phone-hdpi-512-dalvik-heap.mk)
+$(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
+$(call inherit-product, device/motorola/omap3-common/omap3.mk)
 $(call inherit-product-if-exists, vendor/motorola/droid2we/droid2we-vendor.mk)

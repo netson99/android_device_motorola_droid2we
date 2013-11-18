@@ -24,11 +24,6 @@
 # Device overlay and prebuilt directories
 DEVICE_PREBUILT := device/motorola/droid2we/prebuilt
 
-# Audio + Bluetooth
-PRODUCT_COPY_FILES += \
-	device/motorola/droid2we/audio/libaudio.so:/system/lib/libaudio.so \
-	device/motorola/droid2we/audio/liba2dp.so:/system/lib/liba2dp.so
-
 PRODUCT_PACKAGES += \
 	audio.primary.omap3 \
 	libaudiohw_legacy \
@@ -38,16 +33,15 @@ PRODUCT_PACKAGES += \
 	hciattach \
 	hcidump
 
-PRODUCT_PACKAGES += \
-	hijack-boot.zip
-
-# Hijack files
+# root
 PRODUCT_COPY_FILES += \
-	device/motorola/droid2we/hijack-boot.zip:system/etc/hijack-boot.zip
+	device/motorola/droid2we/prebuilt/root/init.rc:root/init.rc \
+	device/motorola/droid2we/prebuilt/root/init.mapphone_cdma.rc:root/init.mapphone_cdma.rc \
+	device/motorola/droid2we/prebuilt/root/ueventd.mapphone_cdma.rc:root/ueventd.mapphone_cdma.rc
 
 # Kernel
 ifeq ($(TARGET_PREBUILT_KERNEL),)
-LOCAL_KERNEL := device/motorola/droid2we/kernel
+LOCAL_KERNEL := device/motorola/droid2we/prebuilt/kernel
 else
 LOCAL_KERNEL := $(TARGET_PREBUILT_KERNEL)
 endif
@@ -68,14 +62,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 	ro.ril.ntmodeglobal=true
 
 # Inherit from those products. Most specific first.
-$(call inherit-product, device/motorola/omap34com/full_base_telephony.mk)
 $(call inherit-product, device/common/gps/gps_us_supl.mk)
 
-# Inherit from maguro device
+# Inherit from droid2we device
 $(call inherit-product, device/motorola/droid2we/device.mk)
-
-# Set those variables here to overwrite the inherited values.
-PRODUCT_NAME := full_droid2we
-PRODUCT_DEVICE := droid2we
-PRODUCT_BRAND := verizon
-PRODUCT_MODEL := DROID2 Global
