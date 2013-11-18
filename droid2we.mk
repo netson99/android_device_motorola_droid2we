@@ -41,7 +41,7 @@ PRODUCT_COPY_FILES += \
 
 # Kernel
 ifeq ($(TARGET_PREBUILT_KERNEL),)
-LOCAL_KERNEL := device/motorola/droid2we/prebuilt/kernel
+LOCAL_KERNEL := device/motorola/droid2we/kernel
 else
 LOCAL_KERNEL := $(TARGET_PREBUILT_KERNEL)
 endif
