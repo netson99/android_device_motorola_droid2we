@@ -37,7 +37,9 @@ PRODUCT_PACKAGES += \
 PRODUCT_COPY_FILES += \
 	device/motorola/droid2we/prebuilt/root/init.rc:root/init.rc \
 	device/motorola/droid2we/prebuilt/root/init.mapphone_cdma.rc:root/init.mapphone_cdma.rc \
-	device/motorola/droid2we/prebuilt/root/ueventd.mapphone_cdma.rc:root/ueventd.mapphone_cdma.rc
+	device/motorola/droid2we/prebuilt/root/ueventd.mapphone_cdma.rc:root/ueventd.mapphone_cdma.rc \
+	device/motorola/droid2we/prebuilt/root/fstab.mapphone_cdma:root/fstab.mapphone_cdma \
+	device/motorola/droid2we/prebuilt/root/init.usb.rc:root/init.usb.rc
 
 # Kernel
 ifeq ($(TARGET_PREBUILT_KERNEL),)

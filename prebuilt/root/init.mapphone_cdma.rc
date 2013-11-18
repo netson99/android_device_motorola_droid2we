@@ -1,37 +1,47 @@
-on fs
+on init 
 
-    # Mount mmc partitions
-    mkdir /pds 0775 system system
-    mount ext3 /dev/block/mmcblk1p21 /system noatime nodiratime
-    mount ext3 /dev/block/mmcblk1p21 /system ro remount
-    mount ext3 /dev/block/mmcblk1p22 /cache nosuid nodev noatime nodiratime barrier=0
-    mount ext3 /dev/block/mmcblk1p24 /data nosuid nodev noatime nodiratime barrier=0
-
-on post-fs
-    # Backward compatibility
-    symlink /dev /dev/netmux
-    symlink /dev/ttyGS0 /dev/acm0
-    mount rootfs rootfs / rw remount
-
-    # Busybox
-    export HISTFILE /data/local/tmp/.ash_history
-    export HISTFILESIZE 1000
-    export ENV /system/etc/profile
-
-    # Other global env variables
     export DSP_PATH /system/lib/dsp
 
-    # Mount tmp, we dont have swap, use ramfs which can grow if required
-    mkdir /tmp
-    mount ramfs ramfs /tmp size=512k relatime
-    chmod 0777 /tmp
-    chown system shell /tmp
+    # Create mountpoint so Dalvik can mark as slave in zygotes.
+    mount tmpfs tmpfs /storage mode=0050,uid=0,gid=1028
+
+    mkdir /storage/sdcard0 0000 system system
+
+    export EXTERNAL_STORAGE /storage/sdcard0
+
+    # backwards compatibility
+    symlink /storage/sdcard0 /sdcard
+    symlink /storage/sdcard0 /mnt/sdcard
+
+on fs
+
+    mount_all ./fstab.mapphone_cdma
 
     # Restore good uid, mount as ramfs reset to root root 755
     chown root system /mnt/asec
     chmod 0755 /mnt/asec
     chown root system /mnt/obb
     chmod 0755 /mnt/obb
+
+    symlink /dev/block/mmcblk1p21 /dev/block/system
+    symlink /dev/block/mmcblk1p22 /dev/block/cache
+    symlink /dev/block/mmcblk1p24 /dev/block/data
+
+    # Mount mtd partitions
+    mount ext3 /dev/block/mmcblk1p7 /pds nosuid nodev noatime nodiratime
+    chown system system /pds
+    chmod 0775 /pds
+    mkdir /pds/public 0775 system shell
+    chown system shell /pds/public
+    chmod 0775 /pds/public
+
+    # Mount preinstall partition
+    mkdir /preinstall 0771 system system
+    mount ext3 /dev/block/mmcblk1p23 /preinstall nosuid nodev noatime nodiratime
+    chmod 0771 /preinstall
+    chown system system /preinstall
+
+on post-fs
 
     # Configure kernel options
     # Disable a system-wide task dump on OOM in default
@@ -47,20 +57,6 @@ on post-fs
     # Change ownership for vibrators
     chown system system /sys/class/timed_output/vibrator/enable
     chmod 0660 /sys/class/timed_output/vibrator/enable
-
-    # Mount mtd partitions
-    mount ext3 /dev/block/mmcblk1p7 /pds nosuid nodev noatime nodiratime
-    chown system system /pds
-    chmod 0775 /pds
-    mkdir /pds/public 0775 system shell
-    chown system shell /pds/public
-    chmod 0775 /pds/public
-
-    # Mount preinstall partition
-    mkdir /preinstall 0771 system system
-    mount ext3 /dev/block/mmcblk1p23 /preinstall nosuid nodev noatime nodiratime
-    chmod 0771 /preinstall
-    chown system system /preinstall
 
     # bluetooth power up/down interface (wl127x Bluetooth and hci0)
     chown bluetooth bluetooth /sys/class/rfkill/rfkill0/type
@@ -88,6 +84,26 @@ on post-fs
     mkdir /data/panicreports
     chown root radio /data/panicreports
     chmod 0777 /data/panicreports
+
+    # Backward compatibility
+    symlink /dev /dev/netmux
+    symlink /dev/ttyGS0 /dev/acm0
+    mount rootfs rootfs / rw remount
+
+    # Mount tmp, we dont have swap, use ramfs which can grow if required
+    mkdir /tmp
+    mount ramfs ramfs /tmp size=512k relatime
+    chmod 0777 /tmp
+    chown system shell /tmp
+
+    # Busybox
+    export HISTFILE /data/local/tmp/.ash_history
+    export HISTFILESIZE 1000
+    export ENV /system/etc/profile
+
+# Tweaks
+    # DSS - disable tearing elimination
+    write /sys/devices/omapdss/display0/tear_elim 0 
 
 on post-fs-data
     # Create basic filesystem structure
@@ -148,7 +164,7 @@ on post-fs-data
 
     setprop vold.post_fs_data_done 1
 
-on init
+on boot
     # directory for encryption management tool, enc_mgt_tool
     mkdir /data/emt
     chmod 0700 /data/emt
@@ -281,11 +297,8 @@ on boot
 on property:sys.chargeonly.mode=1
     class_reset main
     class_reset late_start
-    start console
     start battd
-    write /data/simpin lock
     start charge
-    stop zygote
 
 # Moto safe power down
 on property:sys.reboot=1
@@ -298,27 +311,6 @@ on property:sys.shutdown=1
 
 on property:init.svc.wpa_supplicant=stopped
     stop dhcpcd
-
-# Adb over Network
-on property:service.adb.tcp.port=5555
-    restart adbd
-
-on property:service.adb.tcp.port=-1
-    restart adbd
-
-on property:sys.usb.config=mass_storage,adb
-    start adbd
-
-on property:sys.usb.config=mtp,adb
-    start adbd
-
-on property:sys.usb.config=ptp,adb
-    start adbd
-
-on property:service.adb.root=1
-    write /sys/devices/virtual/usb_composite/adb/enable 0
-    restart adbd
-    write /sys/devices/virtual/usb_composite/adb/enable 1
 
 service reboot_key /system/bin/reboot
     user system
@@ -435,3 +427,7 @@ on property:dev.bootcomplete=1
 #get BP version and save to misc
 service savebpver /system/bin/SaveBPVer
     oneshot
+
+service fuse_sdcard0 /system/bin/sdcard -u 1023 -g 1023 -d /mnt/media_rw/sdcard0 /storage/sdcard0
+    class late_start
+    disabled
