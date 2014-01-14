@@ -22,10 +22,10 @@ DEVICE_PACKAGE_OVERLAYS := device/motorola/droid2we/overlay
 
 # These are the hardware-specific features
 PRODUCT_COPY_FILES := \
-	frameworks/base/data/etc/android.hardware.telephony.cdma.xml:system/etc/permissions/android.hardware.telephony.cdma.xml \
-	frameworks/base/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml
+	frameworks/native/data/etc/android.hardware.telephony.cdma.xml:system/etc/permissions/android.hardware.telephony.cdma.xml \
+	frameworks/native/data/etc/android.hardware.telephony.gsm.xml:system/etc/permissions/android.hardware.telephony.gsm.xml
 
-$(call inherit-product, device/motorola/hijack/common_hijack.mk)
+#$(call inherit-product, device/motorola/hijack/common_hijack.mk)
 $(call inherit-product, frameworks/native/build/phone-hdpi-512-dalvik-heap.mk)
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 $(call inherit-product, device/motorola/omap3-common/omap3.mk)
